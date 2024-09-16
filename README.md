@@ -1,5 +1,5 @@
 # Video Talker
-##Step 1
+## Step 1
 ![Local Stream](https://github.com/kadiirhocaoglu/VideoTalkerWebRTC/blob/main/forReadMe/images/localStream.png)
 
 ## About the Project
