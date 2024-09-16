@@ -1,10 +1,8 @@
-import rootReducer from "./reducer";
-import { configureStore, Tuple } from '@reduxjs/toolkit'
-import additionalMiddleware from './middleware/additionalMiddleware'
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './reducer';
+
 const store = configureStore({
-    reducer: {
-        rootReducer,
-        middleware: () => new Tuple(additionalMiddleware),
-    }
+    reducer: rootReducer, 
 });
+
 export default store;

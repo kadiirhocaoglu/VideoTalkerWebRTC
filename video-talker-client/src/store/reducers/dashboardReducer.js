@@ -1,19 +1,27 @@
 import * as dashboardActions from '../actions/dashboardActions';
 
 const initState = {
-    username: ''
- };
- 
- const dashboardReducer = (state = initState, action) => {
+    username: '',
+    activeUsers: []
+};
+
+const dashboardReducer = (state = initState, action) => {
     switch (action.type) {
         case dashboardActions.DASHBOARD_SET_USERNAME:
             return {
                 ...state,
                 username: action.username
             };
-            default: 
-                return state;
-        }
- }
+        case dashboardActions.DASHBOARD_SET_ACTIVE_USERS:
+            return{
+                ...state,
+                activeUsers: action.activeUsers
+            };
+        default:
+            return state;
+        
+    }
 
- export default dashboardReducer;
+}
+
+export default dashboardReducer;

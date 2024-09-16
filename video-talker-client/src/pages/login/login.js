@@ -1,46 +1,44 @@
 import React, { useState } from 'react';
 import './login.css';
-import UsernameInput from './components/usernameInput';
-import SubmitButton from './components/submitButton';
-import UsernameLabel from './components/usernameLabel';
 import { useNavigate } from 'react-router-dom';
 import { setUsername } from '../../store/actions/dashboardActions';
 import { connect } from 'react-redux';
 import { registerNewUser } from '../../utils/wwsConnection';
-import { getActiveUsers } from '../../utils/wwsConnection';
 
-const Login = ({ saveUsername }) => {
+const LoginPage = ({ saveUsername }) => {
     const [username, setUsername] = useState('');
-    const navigate = useNavigate();
-
+  
+    const navigator = useNavigate();
+  
     const handleSubmitButtonPressed = () => {
-        registerNewUser(username);
-        saveUsername(username);
-        getActiveUsers();
-        navigate('/dashboard');
+      registerNewUser(username);
+      saveUsername(username);
+      navigator('/dashboard');
     };
-
+  
     return (
         <div className="login-container">
-            <div className="login-card">
-                <h1 className="login-title">WeePay</h1>
-                <h6 className="login-title">Login to WeeTalk</h6>
-                <form className="login-form">
-                    <UsernameLabel />
-                    <UsernameInput username={username} setUsername={setUsername} />
-                    <SubmitButton handleSubmitButtonPressed={handleSubmitButtonPressed} />
-                </form>
-            </div>
+        <div className="login-card">
+          <h2>Login</h2>
+          <input
+            type="text"
+            placeholder="Enter Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="login-input"
+          />
+          <button onClick={handleSubmitButtonPressed} className="login-button">
+            Login
+          </button>
         </div>
+      </div>
     );
-};
-
-
-const mapActionToProps = (dispatch) => {
+  };
+  
+  const mapActionsToProps = (dispatch) => {
     return {
-        saveUsername: (username) => dispatch(setUsername(username)),
+      saveUsername: username => dispatch(setUsername(username))
     };
-};
-
-
-export default connect(null, mapActionToProps)(Login);
+  };
+  
+  export default connect(null, mapActionsToProps)(LoginPage);
