@@ -3,10 +3,17 @@ import './dashboard.css';
 import ActiveUsersList from './components/activeUsersList';
 import UserProfile from './components/userProfile';
 import VideoPanel from './components/videoPanel';
+import DirectCall from './components/directCall/directCall';
+import * as webRTCHandler from '../../utils/webRTC/webRTCHandler'
 
 const Dashboard = () => {
     const [isSidebarVisible, setSidebarVisible] = useState(true);
-  
+    
+    useEffect(() => {
+      webRTCHandler.getLocalStream()
+    }, []);
+
+
     useEffect(() => {
       const handleResize = () => {
         setSidebarVisible(window.innerWidth > 768);
@@ -24,9 +31,8 @@ const Dashboard = () => {
           <ActiveUsersList />
           <UserProfile />
         </div>
-        <div className="video-panel">
-          <VideoPanel />
-        </div>
+          <DirectCall />
+      
       </div>
     );
   };
