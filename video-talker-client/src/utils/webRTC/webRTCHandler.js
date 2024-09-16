@@ -1,4 +1,4 @@
-import { setLocalStream } from "../../store/actions/callAction";
+import { callStates, setCallState, setLocalStream } from "../../store/actions/callAction";
 import store from '../../store/store';
 
 const defaultConstraints = {
@@ -10,6 +10,7 @@ export const getLocalStream = () => { // MARK: Burası bir promise döndürür p
     navigator.mediaDevices.getUserMedia(defaultConstraints)
     .then(stream => {
         store.dispatch(setLocalStream(stream));
+        store.dispatch(setCallState(callStates.CALL_AVAILABLE));
     })
     .catch(err => {
         console.log('Error occurred when trying to access local stream');

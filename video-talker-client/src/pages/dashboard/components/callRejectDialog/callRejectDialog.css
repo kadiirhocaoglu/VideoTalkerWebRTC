@@ -1,0 +1,14 @@
+.reject-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffe6e6;
+  }
+  
+  .reject-container h2 {
+    color: red;
+  }
+  
+  .reject-container p {
+    color: gray;
+  }
+  

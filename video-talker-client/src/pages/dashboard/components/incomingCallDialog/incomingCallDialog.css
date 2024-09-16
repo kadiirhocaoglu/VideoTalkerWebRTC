@@ -1,0 +1,26 @@
+.incoming-call-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .button-group {
+    margin-top: 20px;
+  }
+  
+  .accept-button {
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .reject-button {
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './dashboard.css';
-import ActiveUsersList from './components/activeUsersList';
-import UserProfile from './components/userProfile';
-import VideoPanel from './components/videoPanel';
+import ActiveUsersList from './components/activeUsers/activeUsersList';
+import UserProfile from './components/userProfile/userProfile';
+import VideoPanel from './components/videoPanel/videoPanel';
 import DirectCall from './components/directCall/directCall';
 import * as webRTCHandler from '../../utils/webRTC/webRTCHandler'
 
@@ -31,8 +31,9 @@ const Dashboard = () => {
           <ActiveUsersList />
           <UserProfile />
         </div>
+        <div className="video-panel">
           <DirectCall />
-      
+        </div>
       </div>
     );
   };
