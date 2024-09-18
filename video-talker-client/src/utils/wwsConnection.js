@@ -20,6 +20,10 @@ export const ConnectionWWS = ()=>{
         console.log("broadcast çalıştı");
         handleBroadcastEvents(data); 
     });
+
+    socket.on('pre-offer', (data) => {
+        //TODO: webRTC        
+    })
 }
 
 export const registerNewUser = (username) =>{
@@ -30,6 +34,10 @@ export const registerNewUser = (username) =>{
         }
         );
     }
+}
+
+export const sendPreOffer = (data) => {
+    socket.emit('pre-offer', data);
 }
 
 export const handleBroadcastEvents = (data) => {

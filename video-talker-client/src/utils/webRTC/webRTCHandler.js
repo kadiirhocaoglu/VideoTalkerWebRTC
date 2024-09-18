@@ -1,5 +1,6 @@
-import { callStates, setCallingDialogVisible, setCallState, setLocalStream } from "../../store/actions/callAction";
+import { callStates, setCallerUsername, setCallingDialogVisible, setCallState, setLocalStream } from "../../store/actions/callAction";
 import store from '../../store/store';
+import * as wss from '../wwsConnection';
 
 const defaultConstraints = {
     video: true, 
@@ -27,7 +28,13 @@ export const callToOtherUser = (calleeDetails) => {
     wss.sendPreOffer({
         callee: calleeDetails,
         caller: {
-            username: store.getState
+            username: store.getState().dashboard.username
         }
     })
+}
+
+export const handlePreOffer = (data) => {
+    connectedUserSocketId = data.callerSocketId;
+    store.dispatch(setCallerUsername(data.username));
+    store.dispatch(setCallState(callStates.CALL_REQUESTED));
 }

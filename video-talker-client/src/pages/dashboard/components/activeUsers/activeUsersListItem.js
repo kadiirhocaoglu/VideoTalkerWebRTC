@@ -1,9 +1,10 @@
 import React from 'react';
+import { callToOtherUser } from '../../../../utils/webRTC/webRTCHandler';
 
 const ActiveUserListItem = ({ activeUser }) => {
 
     const handleListItemPressed = () => {
-        console.log(`Calling ${activeUser.username}`);
+        callToOtherUser(activeUser);          
     };
 
     return (
