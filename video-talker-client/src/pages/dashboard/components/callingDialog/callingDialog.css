@@ -1,34 +1,20 @@
-.calling-container {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .calling-animation {
-    margin: 20px auto;
-    width: 100px;
-    height: 100px;
-    background-color: lightblue;
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-  
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  
-  .end-call-button {
-    padding: 10px 20px;
-    background-color: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
+.direct_calling_dialog {
+  position: absolute;
+  width: 400px;
+  height: 300px;
+  top: calc(50% - 150px);
+  left: calc(50% - 200px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.direct_call_dialog_caller_name {
+  font-size: 30px;
+}
+
+.direct_call_dialog_button_container {
+  margin-top: 20px;
+}

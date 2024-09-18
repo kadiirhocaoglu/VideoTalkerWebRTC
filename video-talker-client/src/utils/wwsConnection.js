@@ -1,6 +1,7 @@
 import SocketClient from 'socket.io-client'
 import store from '../store/store'
 import * as dashboardActions from '../store/actions/dashboardActions'
+import * as webRTCHandler from './webRTC/webRTCHandler'
 const SERVER = 'http://localhost:5000';
 
 const broadcastEventTypes = {
@@ -22,8 +23,17 @@ export const ConnectionWWS = ()=>{
     });
 
     socket.on('pre-offer', (data) => {
-        //TODO: webRTC        
-    })
+        webRTCHandler.handlePreOffer(data);
+    });
+    
+    socket.on('pre-offer-answer', (data) => {
+        webRTCHandler.handlePreOfferAnswer(data);
+    });
+}
+;
+
+export const sendPreOfferAnswer = (data) => {
+    socket.emit('pre-offer-answer', data)
 }
 
 export const registerNewUser = (username) =>{
@@ -38,7 +48,8 @@ export const registerNewUser = (username) =>{
 
 export const sendPreOffer = (data) => {
     socket.emit('pre-offer', data);
-}
+  };
+  
 
 export const handleBroadcastEvents = (data) => {
     switch (data.eventName) {

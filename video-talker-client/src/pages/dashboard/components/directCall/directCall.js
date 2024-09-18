@@ -5,26 +5,44 @@ import RemoteVideoView from '../remoteVideoView/remoteVideoView';
 import CallingDialog from '../callingDialog/callingDialog';
 import CallRejectDialog from '../callRejectDialog/callRejectDialog';
 import IncomingCallDialog from '../incomingCallDialog/incomingCallDialog';
-import { callStates } from '../../../../store/actions/callAction';
+import { callStates, setCallRejected } from '../../../../store/actions/callAction';
 
-const directCall = props => {
-    const {localStream, remoteStream, callState, callerUsername, callingDialogVisible} = props;
+
+const DirectCall = (props) => {
+  const {
+    localStream,
+    remoteStream,
+    callState,
+    callerUsername,
+    callingDialogVisible,
+    callRejected,
+    hideCallRejectedDialog
+  } = props;
+
   return (
     <>
-        <LocalVideoView  LocalStream ={localStream}   />
-        {remoteStream && <RemoteVideoView  RemoteStream = { remoteStream } />}
-        {callState === callStates.CALL_REQUESTED && <CallingDialog />}
-        {/* <CallRejectDialog /> */}
-        {callingDialogVisible && <IncomingCallDialog callerUsername = {callerUsername} />}
-        
+      <LocalVideoView localStream={localStream} />
+      {remoteStream && <RemoteVideoView remoteStream={remoteStream} />}
+      {callRejected.rejected && <CallRejectDialog
+        reason={callRejected.reason}
+        hideCallRejectedDialog={hideCallRejectedDialog}
+      />}
+      {callState === callStates.CALL_REQUESTED && <IncomingCallDialog callerUsername={callerUsername} />}
+      {callingDialogVisible && <CallingDialog />}
     </>
-  )
+  );
+};
+
+function mapStoreStateToProps ({ call }) {
+  return {
+    ...call
+  };
 }
 
-function mapStoreStateToProps({call}){
-    return{
-        ...call
-    }
+function mapDispatchToProps (dispatch) {
+  return {
+    hideCallRejectedDialog: (callRejectedDetails) => dispatch(setCallRejected(callRejectedDetails))
+  };
 }
 
-export default connect(mapStoreStateToProps, null)(directCall);
+export default connect(mapStoreStateToProps, mapDispatchToProps)(DirectCall);

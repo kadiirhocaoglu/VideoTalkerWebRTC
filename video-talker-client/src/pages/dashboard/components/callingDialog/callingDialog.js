@@ -1,17 +1,12 @@
+
 import './callingDialog.css';
 
-import React from 'react'
-
-const callingDialog = () => {
+const CallingDialog = () => {
   return (
-    <div className="calling-container">
-    <h2>Calling...</h2>
-    <div className="calling-animation">
-      {/* Buraya arama sırasında bir animasyon ekleyebilirsin */}
+    <div className='direct_calling_dialog background_secondary_color'>
+      <span>Calling</span>
     </div>
-    <button className="end-call-button">End Call</button>
-  </div>
-  )
-}
+  );
+};
 
-export default callingDialog
+export default CallingDialog;
