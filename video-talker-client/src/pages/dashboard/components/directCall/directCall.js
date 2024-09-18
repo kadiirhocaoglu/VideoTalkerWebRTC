@@ -21,8 +21,8 @@ const DirectCall = (props) => {
 
   return (
     <>
-      <LocalVideoView localStream={localStream} />
-      {remoteStream && <RemoteVideoView remoteStream={remoteStream} />}
+      <LocalVideoView LocalStream={localStream} />
+      {remoteStream && <RemoteVideoView RemoteStream={remoteStream} />}
       {callRejected.rejected && <CallRejectDialog
         reason={callRejected.reason}
         hideCallRejectedDialog={hideCallRejectedDialog}
