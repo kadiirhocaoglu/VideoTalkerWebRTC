@@ -20,58 +20,75 @@ const io = socket(server, {
 });
 
 let peers = [];
+
 const broadcastEventTypes = {
-    ACTIVE_USERS: 'ACTIVE_USERS',
-    GROUP_CALL_ROOMS: 'GROUP_CALL_ROOMS'
-}
+  ACTIVE_USERS: 'ACTIVE_USERS',
+  GROUP_CALL_ROOMS: 'GROUP_CALL_ROOMS'
+};
 
-///MARK: work when user connection server 
 io.on('connection', (socket) => {
-    socket.emit('connection', null);
-    console.log('new user connected');
-    console.log(socket.id);
+  socket.emit('connection', null);
+  console.log('new user connected');
+  console.log(socket.id);
 
-    ///MARK: saves to the peers list when the user registers
-    socket.on('register-new-user', (data) => { 
-        peers.push({
-            username: data.username,
-            socketId: socket.id  
-        });
-        console.log('register new user');
-        console.log(peers);
-
-        io.emit('broadcast', {
-            eventName: broadcastEventTypes.ACTIVE_USERS,
-            activeUsers: peers
-        });
+  socket.on('register-new-user', (data) => {
+    peers.push({
+      username: data.username,
+      socketId: data.socketId
     });
+    console.log('registered new user');
+    console.log(peers);
 
-    ///MARK: user disconnect
-    socket.on('disconnect', () => {
-        console.log("user disconnected");
-        peers = peers.filter(x => x.socketId !== socket.id); 
-        console.log(peers);
-
-        io.emit('broadcast', {
-            eventName: broadcastEventTypes.ACTIVE_USERS,
-            activeUsers: peers
-        });
+    io.sockets.emit('broadcast', {
+      event: broadcastEventTypes.ACTIVE_USERS,
+      activeUsers: peers
     });
+  });
 
-    
-    socket.on('pre-offer', (data) => {
-        console.log("");
-        io.to(data.callee.socketId).emit('pre-offer', {
-            callerUsername: data.callerUsername,
-            callerSocketId: socket.id
-        })
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+    peers = peers.filter(peer => peer.socketId !== socket.id);
+    io.sockets.emit('broadcast', {
+      event: broadcastEventTypes.ACTIVE_USERS,
+      activeUsers: peers
     });
-    
-    socket.on('pre-offer-answer', (data) => {
-        console.log('handling pre offer answer');
-        io.to(data.callerSocketId).emit('pre-offer-answer',{
-            answer: data.answer
-        })
-    });
+  });
 
+  // listeners related with direct call
+
+  socket.on('pre-offer', (data) => {
+    console.log('pre-offer handled');
+    io.to(data.callee.socketId).emit('pre-offer', {
+      callerUsername: data.caller.username,
+      callerSocketId: socket.id
+    });
+  });
+
+  socket.on('pre-offer-answer', (data) => {
+    console.log('handling pre offer answer');
+    io.to(data.callerSocketId).emit('pre-offer-answer', {
+      answer: data.answer
+    });
+  });
+
+  socket.on('webRTC-offer', (data) => {
+    console.log('handling webRTC offer');
+    io.to(data.calleeSocketId).emit('webRTC-offer', {
+      offer: data.offer
+    });
+  });
+
+  socket.on('webRTC-answer', (data) => {
+    console.log('handling webRTC answer');
+    io.to(data.callerSocketId).emit('webRTC-answer', {
+      answer: data.answer
+    });
+  });
+
+  socket.on('webRTC-candidate', (data) => {
+    console.log('handling ice candidate');
+    io.to(data.connectedUserSocketId).emit('webRTC-candidate', {
+      candidate: data.candidate
+    });
+  });
 });

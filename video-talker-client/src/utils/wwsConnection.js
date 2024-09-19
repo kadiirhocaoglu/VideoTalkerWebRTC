@@ -10,57 +10,76 @@ const broadcastEventTypes = {
 }
 let socket;
 
-export const ConnectionWWS = ()=>{
+export const ConnectionWWS = () => {
     socket = SocketClient(SERVER);
-    socket.on('connection',()=>{
-        console.log("Succesfully connection");
+
+    socket.on('connection', () => {
+        console.log('succesfully connected with wss server');
         console.log(socket.id);
     });
 
     socket.on('broadcast', (data) => {
-        console.log("broadcast çalıştı");
-        handleBroadcastEvents(data); 
+        handleBroadcastEvents(data);
     });
 
+    // listeners related with direct call
     socket.on('pre-offer', (data) => {
         webRTCHandler.handlePreOffer(data);
     });
-    
+
     socket.on('pre-offer-answer', (data) => {
         webRTCHandler.handlePreOfferAnswer(data);
     });
-}
-;
 
-export const sendPreOfferAnswer = (data) => {
-    socket.emit('pre-offer-answer', data)
-}
+    socket.on('webRTC-offer', (data) => {
+        webRTCHandler.handleOffer(data);
+    });
 
-export const registerNewUser = (username) =>{
-    if (socket != null){
-        socket.emit('register-new-user', {
-            username: username,
-            socketId: socket.id
-        }
-        );
-    }
-}
+    socket.on('webRTC-answer', (data) => {
+        webRTCHandler.handleAnswer(data);
+    });
+
+    socket.on('webRTC-candidate', (data) => {
+        webRTCHandler.handleCandidate(data);
+    });
+};
+
+export const registerNewUser = (username) => {
+    socket.emit('register-new-user', {
+        username: username,
+        socketId: socket.id
+    });
+};
+
 
 export const sendPreOffer = (data) => {
     socket.emit('pre-offer', data);
-  };
-  
-
-export const handleBroadcastEvents = (data) => {
-    switch (data.eventName) {
-        case broadcastEventTypes.ACTIVE_USERS:
-        console.log(data.activeUsers)
-          const activeUsers = data.activeUsers.filter(activeUser => activeUser.socketId !== socket.id);
-        console.log(activeUsers);
-          store.dispatch(dashboardActions.setActiveUsers(activeUsers));
-          break;
-        default:
-          break;
-      }
 };
 
+export const sendPreOfferAnswer = (data) => {
+    socket.emit('pre-offer-answer', data);
+};
+
+export const sendWebRTCOffer = (data) => {
+    socket.emit('webRTC-offer', data);
+};
+
+export const sendWebRTCAnswer = (data) => {
+    socket.emit('webRTC-answer', data);
+};
+
+export const sendWebRTCCandidate = (data) => {
+    socket.emit('webRTC-candidate', data);
+};
+
+const handleBroadcastEvents = (data) => {
+    switch (data.event) {
+        case broadcastEventTypes.ACTIVE_USERS:
+            const activeUsers = data.activeUsers.filter(activeUser => activeUser.socketId !== socket.id);
+            store.dispatch(dashboardActions.setActiveUsers(activeUsers));
+            break;
+        default:
+            break;
+    }
+}
+    ;
